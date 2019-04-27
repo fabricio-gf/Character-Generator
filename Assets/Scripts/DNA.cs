@@ -3,7 +3,7 @@
 public class DNA<T>
 {
     public T[] Genes { get; private set; }
-    public float fitness { get; private set; }
+    public float Fitness { get; private set; }
 
     private Random random;
     private Func<T> getRandomGene;
@@ -27,8 +27,8 @@ public class DNA<T>
 
     public float CalculateFitness(int index)
     {
-        fitness = fitnessFunction(index);
-        return fitness;
+        Fitness = fitnessFunction(index);
+        return Fitness;
     }
 
     public DNA<T> Crossover(DNA<T> otherParent)
