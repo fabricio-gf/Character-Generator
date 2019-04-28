@@ -13,6 +13,9 @@ public class GeneticAlgorithm<T>
     private List<DNA<T>> newPopulation;
     private Random random;
     private float fitnessSum;
+    private int dnaSize;
+    private Func<T> getRandomGene;
+    private Func<int, float> fitnessFunction;
 
     public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<T> getRandomGene, Func<int, float> fitnessFunction, int elitism, float mutationRate = 0.01f)
     {
@@ -22,6 +25,9 @@ public class GeneticAlgorithm<T>
         Population = new List<DNA<T>>(populationSize);
         newPopulation = new List<DNA<T>>(populationSize);
         this.random = random;
+        this.dnaSize = dnaSize;
+        this.getRandomGene = getRandomGene;
+        this.fitnessFunction = fitnessFunction;
 
         BestGenes = new T[dnaSize];
 
@@ -31,24 +37,29 @@ public class GeneticAlgorithm<T>
         }
     }
 
-    public void NewGeneration()
+    public void NewGeneration(int numNewDNA = 0, bool crossoverNewDNA = false)
     {
-        if(Population.Count <= 0)
+        int finalCount = Population.Count + numNewDNA;
+
+        if(finalCount <= 0)
         {
             return;
         }
 
-        CalculateFitness();
-        Population.Sort(CompareDNA);
+        if (Population.Count > 0)
+        {
+            CalculateFitness();
+            Population.Sort(CompareDNA);
+        }
         newPopulation.Clear();
 
-        for(int i = 0; i < Population.Count; i++)
+        for(int i = 0; i < finalCount; i++)
         {
-            if (i < Elitism)
+            if (i < Elitism && i < Population.Count)
             {
                 newPopulation.Add(Population[i]);
             }
-            else
+            else if(i < Population.Count || crossoverNewDNA)
             {
                 DNA<T> parent1 = ChooseParent();
                 DNA<T> parent2 = ChooseParent();
@@ -59,6 +70,11 @@ public class GeneticAlgorithm<T>
 
                 newPopulation.Add(child);
             }
+            else
+            {
+                newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: true));
+            }
+
         }
 
         List<DNA<T>> tmpList = Population;
@@ -66,6 +82,44 @@ public class GeneticAlgorithm<T>
         newPopulation = tmpList;
 
         Generation++;
+    }
+
+    public void SaveGeneration(string filePath)
+    {
+        GeneticSaveData<T> save = new GeneticSaveData<T>
+        {
+            Generation = Generation,
+            PopulationGenes = new List<T[]>(Population.Count),
+
+        };
+
+        for( int i = 0; i < Population.Count; i++)
+        {
+            save.PopulationGenes.Add(new T[dnaSize]);
+            Array.Copy(Population[i].Genes, save.PopulationGenes[i], dnaSize);
+        }
+
+        FileReadWrite.WriteToBinaryFile(filePath, save);
+    }
+
+    public bool LoadGeneration(string filePath)
+    {
+        if (!System.IO.File.Exists(filePath))
+        {
+            return false;
+        }
+
+        GeneticSaveData<T> save = FileReadWrite.ReadFromBinaryFile<GeneticSaveData<T>>(filePath);
+        Generation = save.Generation;
+        for(int i = 0; i < save.PopulationGenes.Count; i++)
+        {
+            if(i >= Population.Count)
+            {
+                Population.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: false));
+            }
+            Array.Copy(save.PopulationGenes[i], Population[i].Genes, dnaSize);
+        }
+        return true;
     }
 
     public int CompareDNA(DNA<T> a, DNA<T> b)

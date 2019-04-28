@@ -25,6 +25,8 @@ public class TestShakespeare : MonoBehaviour
     private GeneticAlgorithm<char> ga;
     private System.Random random;
 
+    private string fullPath;
+
     void Start()
     {
         targetText.text = targetString;
@@ -37,6 +39,10 @@ public class TestShakespeare : MonoBehaviour
 
         random = new System.Random();
         ga = new GeneticAlgorithm<char>(populationSize, targetString.Length, random, GetRandomCharacter, FitnessFunction, elitism, mutationRate);
+
+        fullPath = Application.persistentDataPath + "/Genetic Save";
+
+        ga.LoadGeneration(fullPath);
     }
 
     void Update()
@@ -48,6 +54,12 @@ public class TestShakespeare : MonoBehaviour
         if (ga.BestFitness == 1)
         {
             this.enabled = false;
+        }
+
+        if(ga.Generation % 10 == 0)
+        {
+            ga.SaveGeneration(fullPath);
+            //this.enabled = false;
         }
     }
 
