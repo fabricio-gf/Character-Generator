@@ -171,6 +171,6 @@ public class GeneticAlgorithm<T>
             randomNumber = Population[i].Fitness;
         }
 
-        return null;
+        return Population[0];
     }
 }

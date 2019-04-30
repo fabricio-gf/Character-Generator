@@ -2,6 +2,7 @@
 
 public class DNA<T>
 {
+    //Order of genes: Raça | Classe | Gênero | Orientação Sexual | Status de Relacionamento | Aparência 1 | Aparência 2 | Aparência 3 | Peculiaridades Visuais | Personalidade Geral | Peculiaridades de personalidade | Passado
     public T[] Genes { get; private set; }
     public float Fitness { get; private set; }
 
