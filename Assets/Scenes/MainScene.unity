@@ -1114,9 +1114,9 @@ MonoBehaviour:
   - {fileID: 1394546314}
   - {fileID: 236170028}
   - {fileID: 321225839}
-  populationSize: 200
+  populationSize: 5
   mutationRate: 0.01
-  elitism: 5
+  elitism: 1
   numberOfFeatures: 1
   numberOfProfileAxes: 2
   axisSize: 5

@@ -9,9 +9,9 @@ public class TestCharacterGenerator : MonoBehaviour
     [SerializeField] private Text[] texts = null;
 
     [Header("GeneticAlgorithm")]
-    [SerializeField] int populationSize = 200;
+    [SerializeField] int populationSize = 5;
     [SerializeField] float mutationRate = 0.01f;
-    [SerializeField] int elitism = 5;
+    [SerializeField] int elitism = 1;
 
     [Header("Recommendation System")]
     [SerializeField] int numberOfFeatures = 5;

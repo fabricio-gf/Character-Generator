@@ -157,6 +157,7 @@ public class GeneticAlgorithm<T>
         best.Genes.CopyTo(BestGenes, 0); 
     }
 
+    // Atualmente é feito por rankeamento. Porém, pode causar overfitting, cair no máximo local. Pode ser ruim, considerar mudar
     private DNA<T> ChooseParent()
     {
         double randomNumber = random.NextDouble() * fitnessSum;
