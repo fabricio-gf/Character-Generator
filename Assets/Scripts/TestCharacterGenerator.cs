@@ -18,8 +18,9 @@ public class TestCharacterGenerator : MonoBehaviour
     [SerializeField] int numberOfProfileAxes = 5;
     [SerializeField] int axisSize = 5;
 
-    [SerializeField] int[] profileValues = null;
-    
+    //[SerializeField] int[] profileValues = null;
+    public static int[] profileValues = null;
+
     Dictionary<string, int[,]> tables = new Dictionary<string, int[,]>();
 
     [Header("Tables")]
@@ -67,11 +68,6 @@ public class TestCharacterGenerator : MonoBehaviour
             featureValues[k] = lines;
             k++;
         }
-
-        /*foreach(var v in tables)
-        {
-            Debug.Log("Key: " + v.Key + " - Value: " + v.Value);
-        }*/
     }
 
     void Start()
