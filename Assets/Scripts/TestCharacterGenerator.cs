@@ -154,4 +154,25 @@ public class TestCharacterGenerator : MonoBehaviour
 
         return score;
     }
+
+    private void UpdateTables(int index, int valueChange)
+    {
+        DNA<int> dna = ga.Population[index];
+        string tableName;
+
+        for (int i = 0; i < profileAxes.Length; i++)
+        {
+            for (int j = 0; j < features.Length; j++)
+            {
+                sb.Clear();
+                sb.Append(profileAxes[i]);
+                sb.Append("_");
+                tableName = sb.Append(features[j]).ToString();
+
+                tables[tableName][dna.Genes[j], profileValues[i]] += valueChange;
+            }
+        }
+    }
+
+
 }
