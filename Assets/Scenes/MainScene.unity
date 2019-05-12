@@ -8557,6 +8557,11 @@ MonoBehaviour:
   axisSize: 5
   profileAxes:
   - Agression
+  - Faith
+  - Interaction
+  - Passtime
+  - Past
+  - Rules
   features:
   - Class
   - Personality
