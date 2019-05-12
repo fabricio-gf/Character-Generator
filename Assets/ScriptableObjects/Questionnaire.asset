@@ -13,28 +13,45 @@ MonoBehaviour:
   m_Name: Questionnaire
   m_EditorClassIdentifier: 
   questions:
-  - QuestionName: "Qu\xE3o agressivo seu personagem ser\xE1?"
+  - QuestionName: "Como seu personagem resolve conflitos? (1 - Conversando , 5 - Com
+      viol\xEAncia)"
     AnswerValues:
     - 1
     - 2
     - 3
     - 4
     - 5
-  - QuestionName: "Qu\xE3o fiel seu personagem ser\xE1?"
+  - QuestionName: No que seu personagem mais acredita?
     AnswerValues:
-    - 1
-    - 2
-    - 3
-    - 4
-    - 5
+    - "Em for\xE7as Misteriosas"
+    - "Na ci\xEAncia"
+    - Na natureza
+    - Em si mesmo(a)
+    - "Em religi\xE3o"
   - QuestionName: Qual seu passatempo favorito?
     AnswerValues:
-    - Jogar esportes
-    - Ler livros
-    - Fazer caminhadas
-    - Lutar
-    - Dormir
-  - QuestionName: Sei la
+    - Jogar esportes de equipe
+    - Ler livros/estudar
+    - Caminhadas ao ar livre
+    - Treinamento de combate
+    - Jogos de azar
+  - QuestionName: O que seu personagem pensa de regras?
+    AnswerValues:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+  - QuestionName: "Com que frequ\xEAncia seu personagem gosta de interagir com outras
+      pessoas? (1- Nunca , 5- Sempre que poss\xEDvel)"
+    AnswerValues:
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+  - QuestionName: "O qu\xE3o dif\xEDcil foi o passado do seu personagem? (1- Muito
+      dif\xEDcil , 5- Cresceu muito bem)"
     AnswerValues:
     - 1
     - 2

@@ -14,8 +14,8 @@ public class TestCharacterGenerator : MonoBehaviour
     [SerializeField] int elitism = 1;
 
     [Header("Recommendation System")]
-    [SerializeField] int numberOfFeatures = 5;
-    [SerializeField] int numberOfProfileAxes = 5;
+    [SerializeField] int numberOfFeatures = 6;
+    [SerializeField] int numberOfProfileAxes = 1;
     [SerializeField] int axisSize = 5;
 
     //[SerializeField] int[] profileValues = null;
@@ -83,8 +83,9 @@ public class TestCharacterGenerator : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        ga.NewGeneration();
+        //ga.NewGeneration();
 
+        /*
         sb.Clear();
         string bestGenes;
 
@@ -101,7 +102,7 @@ public class TestCharacterGenerator : MonoBehaviour
             Debug.Log("Selected value: " + featureValues[i][ga.BestGenes[i]]);
             texts[i].text = featureValues[i][ga.BestGenes[i]];
         }
-        Debug.Break();
+        Debug.Break();*/
         //update text
 
         /*if (ga.BestFitness == 1)
@@ -114,6 +115,13 @@ public class TestCharacterGenerator : MonoBehaviour
             ga.SaveGeneration(fullPath);
             this.enabled = false;
         }*/
+    }
+
+    public void NewGeneration()
+    {
+        ga.NewGeneration();
+
+        UpdateTexts(ga.BestGenes);
     }
 
     private int GetRandomAttributeValue()
@@ -170,5 +178,11 @@ public class TestCharacterGenerator : MonoBehaviour
         }
     }
 
-
+    private void UpdateTexts(int[] bestGenes)
+    {
+        for(int i = 0; i < texts.Length; i++)
+        {
+            texts[i].text = featureValues[i][bestGenes[i]];
+        }
+    }   
 }

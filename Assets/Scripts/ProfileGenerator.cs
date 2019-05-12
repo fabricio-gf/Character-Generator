@@ -13,6 +13,12 @@ public class ProfileGenerator : MonoBehaviour
 
     [SerializeField] private Questionnaire questionnaire;
 
+    [SerializeField] private GameObject ErrorMessage;
+
+    [SerializeField] private GameObject[] Windows;
+
+    [SerializeField] private TestCharacterGenerator CharacterGenerator;
+
     private void Awake()
     {
         if(questionnaire != null)
@@ -26,6 +32,8 @@ public class ProfileGenerator : MonoBehaviour
                 }
             }
         }
+
+        SetActiveWindow(Windows[0]);
     }
 
     public void SetActiveWindow(GameObject newWindow)
@@ -52,25 +60,49 @@ public class ProfileGenerator : MonoBehaviour
 
         int[] values = new int[ProfileQuestions.Length];
 
+        int count;
+        bool error = false;
+
         for(int i = 0; i < ProfileQuestions.Length; i++)
         {
-            for(int j = 0; j < ProfileQuestions[i].childCount; j++)
+            count = 0;
+            for(int j = 0; j < ProfileQuestions[i].GetChild(0).childCount; j++)
             {
                 if (ProfileQuestions[i].GetChild(0).GetChild(j).GetComponent<Toggle>().isOn)
                 {
                     values[i] = j;
                     break;
                 }
+                count++;
+            }
+            print(count);
+            if(count >= ProfileQuestions[i].GetChild(0).childCount)
+            {
+                error = true;
             }
         }
 
-        TestCharacterGenerator.profileValues = values;
+        if(error == true)
+        {
+            ShowErrorMessage();
+        }
+        else
+        {
+            TestCharacterGenerator.profileValues = values;
 
-        CharacterProfile newProfile = new CharacterProfile(name, values);
+            CharacterProfile newProfile = new CharacterProfile(name, values);
 
-        Debug.Log(Application.persistentDataPath + "\\" + name);
-        string filePath = System.IO.Path.Combine(Application.persistentDataPath, name);
-        FileReadWrite.WriteToBinaryFile(filePath, newProfile);
+            Debug.Log(Application.persistentDataPath + "\\" + name);
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, name);
+            FileReadWrite.WriteToBinaryFile(filePath, newProfile);
 
+            ChangeActiveWindow(Windows[1]);
+            CharacterGenerator.NewGeneration();
+        }
+    }
+
+    void ShowErrorMessage()
+    {
+        ErrorMessage.SetActive(true);
     }
 }
