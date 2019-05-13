@@ -17,7 +17,7 @@ public class ProfileGenerator : MonoBehaviour
 
     [SerializeField] private GameObject[] Windows;
 
-    [SerializeField] private TestCharacterGenerator CharacterGenerator;
+    [SerializeField] private CharacterGenerator CharacterGenerator;
 
     private void Awake()
     {
@@ -88,7 +88,7 @@ public class ProfileGenerator : MonoBehaviour
         }
         else
         {
-            TestCharacterGenerator.profileValues = values;
+            CharacterGenerator.profileValues = values;
 
             CharacterProfile newProfile = new CharacterProfile(name, values);
 

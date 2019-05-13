@@ -3,7 +3,7 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TestCharacterGenerator : MonoBehaviour
+public class CharacterGenerator : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Text[] texts = null;
@@ -159,9 +159,9 @@ public class TestCharacterGenerator : MonoBehaviour
         return score;
     }
 
-    private void UpdateTables(int index, int valueChange)
+    public void UpdateTables(int valueChange)
     {
-        DNA<int> dna = ga.Population[index];
+        int[] bestGenes = ga.BestGenes;
         string tableName;
 
         for (int i = 0; i < profileAxes.Length; i++)
@@ -173,7 +173,7 @@ public class TestCharacterGenerator : MonoBehaviour
                 sb.Append("_");
                 tableName = sb.Append(features[j]).ToString();
 
-                tables[tableName][dna.Genes[j], profileValues[i]] += valueChange;
+                tables[tableName][bestGenes[j], profileValues[i]] += valueChange;
             }
         }
     }
