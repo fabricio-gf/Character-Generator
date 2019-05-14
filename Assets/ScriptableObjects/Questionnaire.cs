@@ -11,6 +11,6 @@ public class Questionnaire : ScriptableObject
 [System.Serializable]
 public class Questions
 {
-    public string QuestionName;
+    [TextArea] public string QuestionName;
     public string[] AnswerValues;
 }

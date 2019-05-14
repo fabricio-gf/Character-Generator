@@ -92,12 +92,13 @@ public class ProfileGenerator : MonoBehaviour
 
             CharacterProfile newProfile = new CharacterProfile(name, values);
 
-            Debug.Log(Application.persistentDataPath + "\\" + name);
+            /*Debug.Log(Application.persistentDataPath + "\\" + name);
             string filePath = System.IO.Path.Combine(Application.persistentDataPath, name);
-            FileReadWrite.WriteToBinaryFile(filePath, newProfile);
+            FileReadWrite.WriteToBinaryFile(filePath, newProfile);*/
 
             ChangeActiveWindow(Windows[1]);
-            CharacterGenerator.NewGeneration();
+            //CharacterGenerator.NewGeneration();
+            CharacterGenerator.NextGenerationBatch();
         }
     }
 

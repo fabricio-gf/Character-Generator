@@ -7,11 +7,15 @@ public class CharacterGenerator : MonoBehaviour
 {
     [Header("References")]
     [SerializeField] private Text[] texts = null;
+    [SerializeField] private Text generationText = null;
+    [SerializeField] private Text fitnessText = null;
+    [SerializeField] private Text genesText = null;
 
     [Header("GeneticAlgorithm")]
     [SerializeField] int populationSize = 5;
     [SerializeField] float mutationRate = 0.01f;
     [SerializeField] int elitism = 1;
+    [SerializeField] int GenerationBatch = 10;
 
     [Header("Recommendation System")]
     [SerializeField] int numberOfFeatures = 6;
@@ -121,7 +125,18 @@ public class CharacterGenerator : MonoBehaviour
     {
         ga.NewGeneration();
 
-        UpdateTexts(ga.BestGenes);
+        UpdateTexts(ga);
+    }
+
+    public void NextGenerationBatch()
+    {
+        ga.NewGeneration();
+
+        while(ga.Generation % GenerationBatch != 0)
+        {
+            ga.NewGeneration();
+        }
+        UpdateTexts(ga);
     }
 
     private int GetRandomAttributeValue()
@@ -178,11 +193,27 @@ public class CharacterGenerator : MonoBehaviour
         }
     }
 
-    private void UpdateTexts(int[] bestGenes)
+    private void UpdateTexts(GeneticAlgorithm<int> ga)
     {
+        sb.Clear();
+        sb.Append("Genes: ");
         for(int i = 0; i < texts.Length; i++)
         {
-            texts[i].text = featureValues[i][bestGenes[i]];
+            texts[i].text = featureValues[i][ga.BestGenes[i]];
+            sb.Append(ga.BestGenes[i]);
+            if(i < texts.Length-1)
+                sb.Append(" | ");
         }
+        genesText.text = sb.ToString();
+
+        sb.Clear();
+        sb.Append("Generation: ");
+        generationText.text = sb.Append(ga.Generation).ToString();
+
+        sb.Clear();
+        sb.Append("Fitness: ");
+        fitnessText.text = sb.Append(ga.BestFitness).ToString();
+
+
     }   
 }
