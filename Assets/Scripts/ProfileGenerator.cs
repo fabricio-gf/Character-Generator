@@ -3,21 +3,22 @@ using UnityEngine.UI;
 
 public class ProfileGenerator : MonoBehaviour
 {
-    private static GameObject CurrentWindow = null;
-    private GameObject OpenedWindow = null;
+    
 
     [SerializeField] private InputField ProfileNameAnswer;
     [SerializeField] private Transform[] ProfileQuestions;
 
     private CharacterProfile profile = null;
 
+    private string profileName = null;
+
     [SerializeField] private Questionnaire questionnaire;
 
     [SerializeField] private GameObject ErrorMessage;
 
-    [SerializeField] private GameObject[] Windows;
+    [SerializeField] private CharacterGenerator characterGenerator;
 
-    [SerializeField] private CharacterGenerator CharacterGenerator;
+    [SerializeField] private WindowBehaviours windowBehaviours = null;
 
     private void Awake()
     {
@@ -32,31 +33,10 @@ public class ProfileGenerator : MonoBehaviour
                 }
             }
         }
-
-        SetActiveWindow(Windows[0]);
-    }
-
-    public void SetActiveWindow(GameObject newWindow)
-    {
-        CurrentWindow = newWindow;
-    }
-
-    public void ChangeActiveWindow(GameObject newWindow)
-    {
-        CurrentWindow?.SetActive(false);
-        newWindow?.SetActive(true);
-        CurrentWindow = newWindow;
-    }
-
-    public void OpenWindow(GameObject newWindow)
-    {
-        newWindow?.SetActive(true);
-        OpenedWindow = newWindow;
     }
 
     public void SubmitAnswers()
     {
-        string name = ProfileNameAnswer.text;
 
         int[] values = new int[ProfileQuestions.Length];
 
@@ -75,7 +55,6 @@ public class ProfileGenerator : MonoBehaviour
                 }
                 count++;
             }
-            print(count);
             if(count >= ProfileQuestions[i].GetChild(0).childCount)
             {
                 error = true;
@@ -92,18 +71,61 @@ public class ProfileGenerator : MonoBehaviour
 
             CharacterProfile newProfile = new CharacterProfile(name, values);
 
-            /*Debug.Log(Application.persistentDataPath + "\\" + name);
-            string filePath = System.IO.Path.Combine(Application.persistentDataPath, name);
-            FileReadWrite.WriteToBinaryFile(filePath, newProfile);*/
+            SaveNewProfile(newProfile);
 
-            ChangeActiveWindow(Windows[1]);
+            windowBehaviours.ChangeActiveWindow(2);
             //CharacterGenerator.NewGeneration();
-            CharacterGenerator.NextGenerationBatch();
+
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, profileName);
+            filePath += "_Generation";
+            characterGenerator.DefineGenerationPath(filePath);
+
+            characterGenerator.NextGenerationBatch();
         }
     }
 
     void ShowErrorMessage()
     {
         ErrorMessage.SetActive(true);
+    }
+
+    public void DefineNewProfileName()
+    {
+        profileName = ProfileNameAnswer.text;
+        Debug.Log("Profile name: " + profileName);
+    }
+
+    public void SaveNewProfile(CharacterProfile profile)
+    {
+        Debug.Log("SaveNewProfile");
+
+        Debug.Log(Application.persistentDataPath + "/" + profileName);
+
+        string filePath = System.IO.Path.Combine(Application.persistentDataPath, profileName);
+        FileReadWrite.WriteToBinaryFile(filePath, profile);
+    }
+
+    public void DefineCurrentProfile(string name)
+    {
+        profileName = name;
+        Debug.Log("Profile name: " + profileName);
+
+    }
+
+    public void LoadExistingProfile()
+    {
+        string filePath = System.IO.Path.Combine(Application.persistentDataPath, profileName);
+        CharacterProfile existingProfile = FileReadWrite.ReadFromBinaryFile<CharacterProfile>(filePath);
+
+        CharacterGenerator.profileValues = existingProfile.ProfileValues;
+
+        //load GA progress
+        windowBehaviours.ChangeActiveWindow(2);
+
+        filePath = filePath + "_Generation";
+
+        characterGenerator.LoadGeneration(filePath);
+
+        characterGenerator.NextGenerationBatch();
     }
 }

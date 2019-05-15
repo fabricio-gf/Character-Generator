@@ -78,10 +78,6 @@ public class CharacterGenerator : MonoBehaviour
     {
         random = new System.Random();
         ga = new GeneticAlgorithm<int>(populationSize, numberOfFeatures, random, GetRandomAttributeValue, FitnessFunction, elitism, mutationRate);
-
-        fullPath = Application.persistentDataPath + "/Genetic Save";
-
-        ga.LoadGeneration(fullPath);
     }
 
     // Update is called once per frame
@@ -121,6 +117,17 @@ public class CharacterGenerator : MonoBehaviour
         }*/
     }
 
+    public void LoadGeneration(string path)
+    {
+        DefineGenerationPath(path);
+        ga.LoadGeneration(fullPath);
+    }
+
+    public void DefineGenerationPath(string path)
+    {
+        fullPath = path;
+    }
+
     public void NewGeneration()
     {
         ga.NewGeneration();
@@ -137,6 +144,8 @@ public class CharacterGenerator : MonoBehaviour
             ga.NewGeneration();
         }
         UpdateTexts(ga);
+
+        ga.SaveGeneration(fullPath);
     }
 
     private int GetRandomAttributeValue()
@@ -169,7 +178,7 @@ public class CharacterGenerator : MonoBehaviour
 
         //score = (Mathf.Pow(2, score) - 1) / (2 - 1);
 
-        Debug.Log("Fitness score: " + score);
+        //Debug.Log("Fitness score: " + score);
 
         return score;
     }
