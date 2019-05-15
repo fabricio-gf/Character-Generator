@@ -22,7 +22,7 @@ public class ProfileGenerator : MonoBehaviour
 
     private void Awake()
     {
-        if(questionnaire != null)
+        if (questionnaire != null)
         {
             for(int i = 0; i < ProfileQuestions.Length; i++)
             {
@@ -69,14 +69,14 @@ public class ProfileGenerator : MonoBehaviour
         {
             CharacterGenerator.profileValues = values;
 
-            CharacterProfile newProfile = new CharacterProfile(name, values);
+            CharacterProfile newProfile = new CharacterProfile(profileName, values);
 
             SaveNewProfile(newProfile);
 
             windowBehaviours.ChangeActiveWindow(2);
             //CharacterGenerator.NewGeneration();
 
-            string filePath = System.IO.Path.Combine(Application.persistentDataPath, profileName);
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Generations", profileName);
             filePath += "_Generation";
             characterGenerator.DefineGenerationPath(filePath);
 
@@ -101,7 +101,8 @@ public class ProfileGenerator : MonoBehaviour
 
         Debug.Log(Application.persistentDataPath + "/" + profileName);
 
-        string filePath = System.IO.Path.Combine(Application.persistentDataPath, profileName);
+        string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Profiles", profileName);
+        
         FileReadWrite.WriteToBinaryFile(filePath, profile);
     }
 
@@ -114,18 +115,26 @@ public class ProfileGenerator : MonoBehaviour
 
     public void LoadExistingProfile()
     {
-        string filePath = System.IO.Path.Combine(Application.persistentDataPath, profileName);
-        CharacterProfile existingProfile = FileReadWrite.ReadFromBinaryFile<CharacterProfile>(filePath);
+        if (profileName != null)
+        {
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Profiles", profileName);
+            CharacterProfile existingProfile = FileReadWrite.ReadFromBinaryFile<CharacterProfile>(filePath);
 
-        CharacterGenerator.profileValues = existingProfile.ProfileValues;
+            CharacterGenerator.profileValues = existingProfile.ProfileValues;
 
-        //load GA progress
-        windowBehaviours.ChangeActiveWindow(2);
+            //load GA progress
+            windowBehaviours.ChangeActiveWindow(2);
 
-        filePath = filePath + "_Generation";
+            filePath = System.IO.Path.Combine(Application.persistentDataPath, "Generations", profileName);
+            filePath = filePath + "_Generation";
 
-        characterGenerator.LoadGeneration(filePath);
+            characterGenerator.LoadGeneration(filePath);
 
-        characterGenerator.NextGenerationBatch();
+            characterGenerator.NextGenerationBatch();
+        }
+        else
+        {
+            Debug.Log("No profile selected");
+        }
     }
 }
