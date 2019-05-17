@@ -3,6 +3,9 @@ using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
 
+using System.IO;
+using System;
+
 public class CharacterGenerator : MonoBehaviour
 {
     [Header("References")]
@@ -37,6 +40,9 @@ public class CharacterGenerator : MonoBehaviour
     private System.Random random;
     private string fullPath;
     private StringBuilder sb = new StringBuilder();
+
+    public string testFileName = null;
+    public List<string> testLines = new List<string>();
 
     void Awake()
     {
@@ -78,6 +84,8 @@ public class CharacterGenerator : MonoBehaviour
     {
         random = new System.Random();
         ga = new GeneticAlgorithm<int>(populationSize, numberOfFeatures, random, GetRandomAttributeValue, FitnessFunction, elitism, mutationRate);
+
+        testLines.AddRange(ConvertGenerationToLines());
     }
 
     // Update is called once per frame
@@ -132,18 +140,21 @@ public class CharacterGenerator : MonoBehaviour
     {
         ga.NewGeneration();
 
-        UpdateTexts(ga);
+        testLines.AddRange(ConvertGenerationToLines());
     }
 
     public void NextGenerationBatch()
     {
-        ga.NewGeneration();
+        testLines.Clear();
+        NewGeneration();
 
         while(ga.Generation % GenerationBatch != 0)
         {
-            ga.NewGeneration();
+            NewGeneration();
         }
         UpdateTexts(ga);
+
+        TestingPopulationsToFile(testLines.ToArray());
 
         ga.SaveGeneration(fullPath);
     }
@@ -224,5 +235,65 @@ public class CharacterGenerator : MonoBehaviour
         fitnessText.text = sb.Append(ga.BestFitness).ToString();
 
 
-    }   
+    }  
+    
+    private string[] ConvertGenerationToLines()
+    {
+        print("convert");
+        string[] lines = new string[ga.Population.Count+4];
+        int l = 0;
+
+        /*for(int i = 0; i < GenerationBatch; i++)
+        {*/
+            lines[l] = "Generation " + ga.Generation + ": ";
+            l++;
+            lines[l] = "--------------------";
+            l++;
+
+            for (int j = 0; j < ga.Population.Count; j++)
+            {
+                lines[l] = "Individual " + j + ": ";
+                for(int k = 0; k < ga.Population[j].Genes.Length; k++)
+                {
+                    lines[l] += ga.Population[j].Genes[k];
+                    if (k < ga.Population[j].Genes.Length - 1)
+                    {
+                        lines[l] += " | ";
+                    }
+                }
+                l++;
+            }
+            lines[l] = "-------------------";
+            l++;
+            lines[l] = "";
+            l++;
+        //}
+
+        return lines;
+    }
+
+    private void TestingPopulationsToFile(string[] lines)
+    {
+        int i = lines.Length;
+        Array.Resize<string>(ref lines, i + 3);
+        i++;
+        lines[i] = "Mutation rate: " + ga.MutationRate.ToString();
+        i++;
+        lines[i] = "Elitism: " + ga.Elitism.ToString();
+
+        string fileName = Path.Combine(Application.persistentDataPath, testFileName+".txt");
+
+        if (File.Exists(fileName))
+        {
+            File.Delete(fileName);
+        }
+
+        File.Create(fileName).Dispose();
+        File.WriteAllLines(fileName, lines);
+        // Create a new file     
+        /*using (FileStream fs = File.OpenWrite(fileName))
+        {
+            File.WriteAllLines(fileName, lines);
+        }*/
+    }
 }

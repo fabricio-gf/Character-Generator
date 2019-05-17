@@ -3426,7 +3426,7 @@ MonoBehaviour:
   fitnessText: {fileID: 1894905827}
   genesText: {fileID: 438153241}
   populationSize: 20
-  mutationRate: 0.01
+  mutationRate: 0.1
   elitism: 0
   GenerationBatch: 10
   numberOfFeatures: 6
@@ -3446,6 +3446,8 @@ MonoBehaviour:
   - Race
   - Size
   - VisualQuirks
+  testFileName: Generations_Visualization
+  testLines: []
 --- !u!4 &1288907271
 Transform:
   m_ObjectHideFlags: 0
