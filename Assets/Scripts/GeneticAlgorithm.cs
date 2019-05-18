@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 public class GeneticAlgorithm<T>
 {
@@ -11,13 +12,13 @@ public class GeneticAlgorithm<T>
     public int Elitism;
     public float MutationRate;
     private List<DNA<T>> newPopulation;
-    private Random random;
+    private System.Random random;
     private float fitnessSum;
     private int dnaSize;
-    private Func<T> getRandomGene;
+    private Func<int, T> getRandomGene;
     private Func<int, float> fitnessFunction;
 
-    public GeneticAlgorithm(int populationSize, int dnaSize, Random random, Func<T> getRandomGene, Func<int, float> fitnessFunction, int elitism, float mutationRate = 0.01f)
+    public GeneticAlgorithm(int populationSize, int dnaSize, System.Random random, Func<int, T> getRandomGene, Func<int, float> fitnessFunction, int elitism, float mutationRate = 0.01f)
     {
         Generation = 1;
         Elitism = elitism;
@@ -31,9 +32,20 @@ public class GeneticAlgorithm<T>
 
         BestGenes = new T[dnaSize];
 
+        //string test = "";
+
         for(int i = 0; i < populationSize; i++)
         {
+            //test = "Individual " + i + ": ";
             Population.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: true));
+            /*for (int j = 0; j < Population[i].Genes.Length; j++) {
+                test += Population[i].Genes[j];
+                if(j < Population[i].Genes.Length - 1)
+                {
+                    test += " | ";
+                }
+            }
+            Debug.Log(test);*/
         }
     }
 

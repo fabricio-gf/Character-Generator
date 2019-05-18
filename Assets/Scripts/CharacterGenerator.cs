@@ -2,7 +2,6 @@
 using System.Text;
 using UnityEngine;
 using UnityEngine.UI;
-
 using System.IO;
 using System;
 
@@ -22,10 +21,9 @@ public class CharacterGenerator : MonoBehaviour
 
     [Header("Recommendation System")]
     [SerializeField] int numberOfFeatures = 6;
-    [SerializeField] int numberOfProfileAxes = 1;
+    [SerializeField] int numberOfProfileAxes = 6;
     [SerializeField] int axisSize = 5;
 
-    //[SerializeField] int[] profileValues = null;
     public static int[] profileValues = null;
 
     Dictionary<string, int[,]> tables = new Dictionary<string, int[,]>();
@@ -41,12 +39,13 @@ public class CharacterGenerator : MonoBehaviour
     private string fullPath;
     private StringBuilder sb = new StringBuilder();
 
-    public string testFileName = null;
-    public List<string> testLines = new List<string>();
+    // USED TO WRITE THE GENERATION VALUES IN A FILE (on windows, located at "C:\Users\<user>\AppData\LocalLow\FabricioGuedes\Generations_Visualization")
+    string testFileName = "Generations_Visualization";
+    List<string> testLines = new List<string>();
 
     void Awake()
     {
-        //load matrixes from file to memory
+        //load weight matrixes from file to memory
         var files = Resources.LoadAll<TextAsset>("Tables/");
         string[] lines;
         int[,] matrix;
@@ -69,6 +68,7 @@ public class CharacterGenerator : MonoBehaviour
             tables.Add(v.name, matrix);
         }
 
+        //loads feature values to memory
         featureValues = new string[numberOfFeatures][];
         files = Resources.LoadAll<TextAsset>("FeatureValues/");
         int k = 0;
@@ -85,44 +85,7 @@ public class CharacterGenerator : MonoBehaviour
         random = new System.Random();
         ga = new GeneticAlgorithm<int>(populationSize, numberOfFeatures, random, GetRandomAttributeValue, FitnessFunction, elitism, mutationRate);
 
-        testLines.AddRange(ConvertGenerationToLines());
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        //ga.NewGeneration();
-
-        /*
-        sb.Clear();
-        string bestGenes;
-
-        sb.Append("| ");
-        for (int i = 0; i < numberOfFeatures; i++) {
-            sb.Append(ga.BestGenes[i]);
-            sb.Append(" | ");
-        }
-        bestGenes = sb.ToString();
-        Debug.Log("Best genes in generation " + ga.Generation + " : " + bestGenes);
-
-        for(int i = 0; i < featureValues.Length; i++)
-        {
-            Debug.Log("Selected value: " + featureValues[i][ga.BestGenes[i]]);
-            texts[i].text = featureValues[i][ga.BestGenes[i]];
-        }
-        Debug.Break();*/
-        //update text
-
-        /*if (ga.BestFitness == 1)
-        {
-            this.enabled = false;
-        }*/
-
-        /*if (ga.Generation % 10 == 0)
-        {
-            ga.SaveGeneration(fullPath);
-            this.enabled = false;
-        }*/
+        testLines.AddRange(ConvertGenerationToArray());
     }
 
     public void LoadGeneration(string path)
@@ -140,7 +103,7 @@ public class CharacterGenerator : MonoBehaviour
     {
         ga.NewGeneration();
 
-        testLines.AddRange(ConvertGenerationToLines());
+        testLines.AddRange(ConvertGenerationToArray());
     }
 
     public void NextGenerationBatch()
@@ -154,18 +117,21 @@ public class CharacterGenerator : MonoBehaviour
         }
         UpdateTexts(ga);
 
-        TestingPopulationsToFile(testLines.ToArray());
+        GenerationsToFile(testLines.ToArray());
 
         ga.SaveGeneration(fullPath);
     }
 
-    private int GetRandomAttributeValue()
+    // Generates a random number between 0 and the number of available values for the gene
+    private int GetRandomAttributeValue(int currentGene)
     {
-        int size = 5;
+        int size = featureValues[currentGene].Length;
+        //int size = 7;
         int i = random.Next(size);
         return i;
     }
 
+    // To calculate the individual's fitness, checks on each table the value corresponding to the generated characteristic and answered profile attribute. Simple sum of all values to get the fitness
     private float FitnessFunction(int index)
     {
         float score = 0;
@@ -183,17 +149,16 @@ public class CharacterGenerator : MonoBehaviour
                 tableName = sb.Append(features[j]).ToString();
 
                 tempTable = tables[tableName];
+                //print("Table name " + tableName + " size " + tempTable.Length + " index " + dna.Genes[j]);
                 score += tempTable[dna.Genes[j],profileValues[i]];
             }
         }
 
         //score = (Mathf.Pow(2, score) - 1) / (2 - 1);
-
-        //Debug.Log("Fitness score: " + score);
-
         return score;
     }
 
+    // Updates weighted tables based on user evaluation of top individual
     public void UpdateTables(int valueChange)
     {
         int[] bestGenes = ga.BestGenes;
@@ -213,6 +178,7 @@ public class CharacterGenerator : MonoBehaviour
         }
     }
 
+    // Updates UI text on screen
     private void UpdateTexts(GeneticAlgorithm<int> ga)
     {
         sb.Clear();
@@ -237,7 +203,9 @@ public class CharacterGenerator : MonoBehaviour
 
     }  
     
-    private string[] ConvertGenerationToLines()
+    // METHODS USED TO WRITE GENERATIONS INFO TO FILE
+
+    private string[] ConvertGenerationToArray()
     {
         string[] lines = new string[ga.Population.Count+4];
         int l = 0;
@@ -271,7 +239,7 @@ public class CharacterGenerator : MonoBehaviour
         return lines;
     }
 
-    private void TestingPopulationsToFile(string[] lines)
+    private void GenerationsToFile(string[] lines)
     {
         int i = lines.Length;
         Array.Resize<string>(ref lines, i + 3);
@@ -289,10 +257,5 @@ public class CharacterGenerator : MonoBehaviour
 
         File.Create(fileName).Dispose();
         File.WriteAllLines(fileName, lines);
-        // Create a new file     
-        /*using (FileStream fs = File.OpenWrite(fileName))
-        {
-            File.WriteAllLines(fileName, lines);
-        }*/
     }
 }
