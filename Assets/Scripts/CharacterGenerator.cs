@@ -239,7 +239,6 @@ public class CharacterGenerator : MonoBehaviour
     
     private string[] ConvertGenerationToLines()
     {
-        print("convert");
         string[] lines = new string[ga.Population.Count+4];
         int l = 0;
 

@@ -37,6 +37,7 @@ public class GeneticAlgorithm<T>
         }
     }
 
+    // Creates a new population of individuals
     public void NewGeneration(int numNewDNA = 0, bool crossoverNewDNA = false)
     {
         int finalCount = Population.Count + numNewDNA;
@@ -46,6 +47,7 @@ public class GeneticAlgorithm<T>
             return;
         }
 
+        // Sorts the population based on individual fitness
         if (Population.Count > 0)
         {
             CalculateFitness();
@@ -53,12 +55,15 @@ public class GeneticAlgorithm<T>
         }
         newPopulation.Clear();
 
+
         for(int i = 0; i < finalCount; i++)
         {
+            // If elitism is enabled, copies the top individuals to the new population
             if (i < Elitism && i < Population.Count)
             {
                 newPopulation.Add(Population[i]);
             }
+            // Then, executes crossover on the old populations individuals to form a new population
             else if(i < Population.Count || crossoverNewDNA)
             {
                 DNA<T> parent1 = ChooseParent();
@@ -70,6 +75,7 @@ public class GeneticAlgorithm<T>
 
                 newPopulation.Add(child);
             }
+            // Creates new individuals from scratch if the population is increasing
             else
             {
                 newPopulation.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: true));
@@ -168,8 +174,8 @@ public class GeneticAlgorithm<T>
             {
                 return Population[i];
             }
+            randomNumber -= Population[i].Fitness;
 
-            randomNumber = Population[i].Fitness;
         }
 
         return Population[0];

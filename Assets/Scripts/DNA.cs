@@ -10,6 +10,7 @@ public class DNA<T>
     private Func<T> getRandomGene;
     private Func<int, float> fitnessFunction;
 
+    // Class constructor. If shouldInitGenes is false, 
     public DNA(int size, Random random, Func<T> getRandomGene, Func<int, float> fitnessFunction, bool shouldInitGenes = true)
     {
         Genes = new T[size];

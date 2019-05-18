@@ -12,11 +12,11 @@ public class ProfileGenerator : MonoBehaviour
 
     private string profileName = null;
 
-    [SerializeField] private Questionnaire questionnaire;
+    [SerializeField] private Questionnaire questionnaire = null;
 
-    [SerializeField] private GameObject ErrorMessage;
+    [SerializeField] private GameObject ErrorMessage = null;
 
-    [SerializeField] private CharacterGenerator characterGenerator;
+    [SerializeField] private CharacterGenerator characterGenerator = null;
 
     [SerializeField] private WindowBehaviours windowBehaviours = null;
 
@@ -97,8 +97,6 @@ public class ProfileGenerator : MonoBehaviour
 
     public void SaveNewProfile(CharacterProfile profile)
     {
-        Debug.Log("SaveNewProfile");
-
         Debug.Log(Application.persistentDataPath + "/" + profileName);
 
         string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Profiles", profileName);
@@ -110,7 +108,6 @@ public class ProfileGenerator : MonoBehaviour
     {
         profileName = name;
         Debug.Log("Profile name: " + profileName);
-
     }
 
     public void LoadExistingProfile()
