@@ -32,20 +32,9 @@ public class GeneticAlgorithm<T>
 
         BestGenes = new T[dnaSize];
 
-        //string test = "";
-
         for(int i = 0; i < populationSize; i++)
         {
-            //test = "Individual " + i + ": ";
             Population.Add(new DNA<T>(dnaSize, random, getRandomGene, fitnessFunction, shouldInitGenes: true));
-            /*for (int j = 0; j < Population[i].Genes.Length; j++) {
-                test += Population[i].Genes[j];
-                if(j < Population[i].Genes.Length - 1)
-                {
-                    test += " | ";
-                }
-            }
-            Debug.Log(test);*/
         }
     }
 

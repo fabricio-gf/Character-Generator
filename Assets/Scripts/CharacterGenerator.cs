@@ -7,11 +7,6 @@ using System;
 
 public class CharacterGenerator : MonoBehaviour
 {
-    [Header("References")]
-    [SerializeField] private Text[] texts = null;
-    [SerializeField] private Text generationText = null;
-    [SerializeField] private Text fitnessText = null;
-    [SerializeField] private Text genesText = null;
 
     [Header("GeneticAlgorithm")]
     [SerializeField] int populationSize = 5;
@@ -20,6 +15,7 @@ public class CharacterGenerator : MonoBehaviour
     [SerializeField] int GenerationBatch = 10;
 
     [Header("Recommendation System")]
+    [SerializeField] private RecommendationSystem recommendationSystem = null;
     [SerializeField] int numberOfFeatures = 6;
     [SerializeField] int numberOfProfileAxes = 6;
     [SerializeField] int axisSize = 5;
@@ -31,7 +27,7 @@ public class CharacterGenerator : MonoBehaviour
     [Header("Tables")]
     [SerializeField] string[] profileAxes = null;
     [SerializeField] string[] features = null;
-    string[][] featureValues = null; 
+    [HideInInspector] public string[][] featureValues = null; 
 
     // OTHER
     private GeneticAlgorithm<int> ga;
@@ -115,7 +111,7 @@ public class CharacterGenerator : MonoBehaviour
         {
             NewGeneration();
         }
-        UpdateTexts(ga);
+        recommendationSystem.ShowTopThree(ga);
 
         GenerationsToFile(testLines.ToArray());
 
@@ -178,30 +174,7 @@ public class CharacterGenerator : MonoBehaviour
         }
     }
 
-    // Updates UI text on screen
-    private void UpdateTexts(GeneticAlgorithm<int> ga)
-    {
-        sb.Clear();
-        sb.Append("Genes: ");
-        for(int i = 0; i < texts.Length; i++)
-        {
-            texts[i].text = featureValues[i][ga.BestGenes[i]];
-            sb.Append(ga.BestGenes[i]);
-            if(i < texts.Length-1)
-                sb.Append(" | ");
-        }
-        genesText.text = sb.ToString();
-
-        sb.Clear();
-        sb.Append("Generation: ");
-        generationText.text = sb.Append(ga.Generation).ToString();
-
-        sb.Clear();
-        sb.Append("Fitness: ");
-        fitnessText.text = sb.Append(ga.BestFitness).ToString();
-
-
-    }  
+      
     
     // METHODS USED TO WRITE GENERATIONS INFO TO FILE
 
