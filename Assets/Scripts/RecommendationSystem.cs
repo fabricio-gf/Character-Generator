@@ -12,20 +12,30 @@ public class RecommendationSystem : MonoBehaviour
     private int currentIndex = 0;
     private int iterationNumber = 0;
 
+    private int optionIndex = 0;
+
     StringBuilder sb = new StringBuilder();
     GeneticAlgorithm<int> localGA = null;
 
     [Header("References")]
+    [Header("Generation Screen")]
     [SerializeField] private Text[] texts = null;
     [SerializeField] private Text generationText = null;
     [SerializeField] private Text fitnessText = null;
     [SerializeField] private Text genesText = null;
+    [SerializeField] private Text titleText = null;
+
+    [Header("Results Screen")]
+    [SerializeField] private Text[] resultsTexts = null;
+    [SerializeField] private Text resultsTitleText = null;
+
 
     /*[SerializeField] private GameObject GoodButton = null;
     [SerializeField] private GameObject BadButton = null;
     [SerializeField] private GameObject NextGenerationButton = null;
     */
 
+    // METHODS DURING CHARACTER GENERATIONS
     public void ShowTopThree(GeneticAlgorithm<int> ga)
     {
         localGA = ga;
@@ -65,25 +75,57 @@ public class RecommendationSystem : MonoBehaviour
         }
     }
 
+    // METHODS FOR RESULTS SCREEN
     private void ShowFinalScreen()
     {
         windowBehaviours.ChangeActiveWindow(3);
-        ShowListOfOptions();
+        optionIndex = topOptions.Count - 1;
+        ShowOption(optionIndex);
     }
 
-    private void ShowListOfOptions()
+    private void ShowOption(int index)
     {
-        Debug.Break();
+        sb.Clear();
+        sb.Append(optionIndex+1);
+        resultsTitleText.text = sb.Append("º personagem gerado:").ToString();
+
+        for(int i = 0; i < resultsTexts.Length; i++)
+        {
+            resultsTexts[i].text = generator.featureValues[i][topOptions[currentIndex].Genes[i]];
+        }
     }
 
-    public void ExportToPDF(int index)
+    public void ChangeOption(int change)
     {
+        optionIndex += change;
+        if(optionIndex >= 10)
+        {
+            optionIndex = 0;
+        }
+        else if(optionIndex < 0)
+        {
+            optionIndex = 9;
+        }
+        ShowOption(optionIndex);
+    }
 
+    public void ExportToPDF()
+    {
+        Debug.Log("Export to pdf");
+    }
+
+    public void ReturnToMenu()
+    {
+        Debug.Log("Return to menu");
     }
 
     // Updates UI text on screen
     private void UpdateTexts(int[] individual, int generation, float fitness)
     {
+        sb.Clear();
+        sb.Append(((currentIndex+1)+((iterationNumber-1)*3)));
+        titleText.text = sb.Append("º personagem gerado:").ToString();
+
         sb.Clear();
         sb.Append("Genes: ");
         for (int i = 0; i < texts.Length; i++)
