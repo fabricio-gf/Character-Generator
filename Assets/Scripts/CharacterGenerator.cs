@@ -115,7 +115,6 @@ public class CharacterGenerator : MonoBehaviour
 
         GenerationsToFile(testLines.ToArray());
 
-        Debug.Log("Best fitness: " + ga.BestFitness);
         ga.SaveGeneration(fullPath);
     }
 

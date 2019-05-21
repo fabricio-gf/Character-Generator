@@ -5,7 +5,7 @@ public class ProfileGenerator : MonoBehaviour
 {
     
 
-    [SerializeField] private InputField ProfileNameAnswer;
+    [SerializeField] private InputField ProfileNameField;
     [SerializeField] private Transform[] ProfileQuestions;
 
     private CharacterProfile profile = null;
@@ -15,6 +15,7 @@ public class ProfileGenerator : MonoBehaviour
     [SerializeField] private Questionnaire questionnaire = null;
 
     [SerializeField] private GameObject ErrorMessage = null;
+    [SerializeField] private GameObject NameErrorMessage = null;
 
     [SerializeField] private CharacterGenerator characterGenerator = null;
 
@@ -89,16 +90,40 @@ public class ProfileGenerator : MonoBehaviour
         ErrorMessage.SetActive(true);
     }
 
+    public void ResetInputField()
+    {
+        ProfileNameField.text = "";
+    }
+
+    public void CheckInputField()
+    {
+        if(ProfileNameField.text == "")
+        {
+            NameErrorMessage.SetActive(true);
+        }
+        else
+        {
+            NameErrorMessage.SetActive(false);
+
+        }
+    }
+
     public void DefineNewProfileName()
     {
-        profileName = ProfileNameAnswer.text;
-        Debug.Log("Profile name: " + profileName);
+        if (ProfileNameField.text == "")
+        {
+            NameErrorMessage.SetActive(true);
+        }
+        else
+        {
+            NameErrorMessage.SetActive(false);
+            profileName = ProfileNameField.text;
+            windowBehaviours.ChangeActiveWindow(1);
+        }
     }
 
     public void SaveNewProfile(CharacterProfile profile)
     {
-        Debug.Log(Application.persistentDataPath + "/" + profileName);
-
         string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Profiles", profileName);
         
         FileReadWrite.WriteToBinaryFile(filePath, profile);
@@ -107,7 +132,6 @@ public class ProfileGenerator : MonoBehaviour
     public void DefineCurrentProfile(string name)
     {
         profileName = name;
-        Debug.Log("Profile name: " + profileName);
     }
 
     public void LoadExistingProfile()

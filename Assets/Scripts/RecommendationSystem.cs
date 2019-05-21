@@ -42,15 +42,15 @@ public class RecommendationSystem : MonoBehaviour
         localGA.Population.Sort(ga.CompareDNA);
         if (iterationNumber == 3)
         {
+            localGA.Population[0].CalculateFitness(0);
             topOptions.Add(localGA.Population[0]);
             ShowFinalScreen();
         }
         else
         {
-            iterationNumber++;
-            
             for (int i = 0; i < 3; i++)
             {
+                localGA.Population[i].CalculateFitness(i);
                 topOptions.Add(localGA.Population[i]);
             }
 
@@ -61,15 +61,16 @@ public class RecommendationSystem : MonoBehaviour
 
     public void ShowNextResult()
     {
-        if(currentIndex * iterationNumber < topOptions.Count)
+        if(currentIndex + iterationNumber*3 < topOptions.Count)
         {
-            UpdateTexts(topOptions[currentIndex*iterationNumber].Genes, localGA.Generation, topOptions[currentIndex*iterationNumber].Fitness);
+            UpdateTexts(topOptions[currentIndex + iterationNumber*3].Genes, localGA.Generation, topOptions[currentIndex + iterationNumber*3].Fitness);
             currentIndex++;
         }
         else
         {
-            if (iterationNumber <= 3)
+            if (iterationNumber < 3)
             {
+                iterationNumber++;
                 generator.NextGenerationBatch();
             }
         }
@@ -86,12 +87,13 @@ public class RecommendationSystem : MonoBehaviour
     private void ShowOption(int index)
     {
         sb.Clear();
+        sb.Append("Personagens gerados: ");
         sb.Append(optionIndex+1);
-        resultsTitleText.text = sb.Append("º personagem gerado:").ToString();
+        resultsTitleText.text = sb.Append("/10").ToString();
 
         for(int i = 0; i < resultsTexts.Length; i++)
         {
-            resultsTexts[i].text = generator.featureValues[i][topOptions[currentIndex].Genes[i]];
+            resultsTexts[i].text = generator.featureValues[i][topOptions[index].Genes[i]];
         }
     }
 
@@ -116,14 +118,17 @@ public class RecommendationSystem : MonoBehaviour
 
     public void ReturnToMenu()
     {
-        Debug.Log("Return to menu");
+        topOptions.Clear();
+        currentIndex = 0;
+        iterationNumber = 0;
+        optionIndex = 0;
     }
 
     // Updates UI text on screen
     private void UpdateTexts(int[] individual, int generation, float fitness)
     {
         sb.Clear();
-        sb.Append(((currentIndex+1)+((iterationNumber-1)*3)));
+        sb.Append(currentIndex+1+(iterationNumber*3));
         titleText.text = sb.Append("º personagem gerado:").ToString();
 
         sb.Clear();

@@ -1,10 +1,12 @@
-﻿using System.IO;
+﻿using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class WindowBehaviours : MonoBehaviour
 {
     private static GameObject CurrentWindow = null;
     private GameObject OpenedWindow = null;
+    List<string> profileChildList = new List<string>();
 
     [SerializeField] private GameObject profilePrefab = null;
     [SerializeField] private Transform profileList = null;
@@ -15,7 +17,7 @@ public class WindowBehaviours : MonoBehaviour
     private void Awake()
     {
         string filePath = Path.Combine(Application.persistentDataPath, "Generations");
-        DirectoryInfo dirInfo = new System.IO.DirectoryInfo(filePath);
+        DirectoryInfo dirInfo = new DirectoryInfo(filePath);
         if (!dirInfo.Exists)
         {
             dirInfo.Create();
@@ -28,10 +30,15 @@ public class WindowBehaviours : MonoBehaviour
             dirInfo.Create();
         }
 
-        SetActiveWindow(Windows[0]);
+        SetActiveWindow(Windows[4]);
     }
 
     private void Start()
+    {
+        ReloadProfiles();
+    }
+
+    public void ReloadProfiles()
     {
         string filePath = Path.Combine(Application.persistentDataPath, "Profiles");
         DirectoryInfo dirInfo = new DirectoryInfo(filePath);
@@ -40,14 +47,18 @@ public class WindowBehaviours : MonoBehaviour
         CharacterProfile profile;
         string tempPath = null;
 
-        foreach(var f in profiles)
+        foreach (var f in profiles)
         {
             tempPath = Path.Combine(filePath, f.Name);
             profile = FileReadWrite.ReadFromBinaryFile<CharacterProfile>(tempPath);
 
-            obj = Instantiate(profilePrefab, profileList);
+            if (profileChildList.Contains(profile.ProfileName) == false)
+            {
+                obj = Instantiate(profilePrefab, profileList);
 
-            obj.transform.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = profile.ProfileName;
+                obj.transform.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = profile.ProfileName;
+                profileChildList.Add(profile.ProfileName);
+            }
         }
     }
 
