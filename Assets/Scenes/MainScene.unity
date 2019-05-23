@@ -1592,7 +1592,7 @@ PrefabInstance:
     - target: {fileID: 869654942394973803, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
       propertyPath: m_FontData.m_FontStyle
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 869654941285720226, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
@@ -2647,7 +2647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &539730023
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3687,7 +3687,7 @@ PrefabInstance:
     - target: {fileID: 869654942394973803, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
       propertyPath: m_FontData.m_FontStyle
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 869654941285720226, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
@@ -4099,7 +4099,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &895155268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4345,7 +4345,7 @@ PrefabInstance:
     - target: {fileID: 869654942394973803, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
       propertyPath: m_FontData.m_FontStyle
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 869654941285720226, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
@@ -5838,7 +5838,7 @@ PrefabInstance:
     - target: {fileID: 869654942394973803, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
       propertyPath: m_FontData.m_FontStyle
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 869654941285720226, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
@@ -6173,7 +6173,7 @@ PrefabInstance:
     - target: {fileID: 869654942394973803, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
       propertyPath: m_FontData.m_FontStyle
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 869654941285720226, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
@@ -9021,7 +9021,7 @@ PrefabInstance:
     - target: {fileID: 869654942394973803, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
       propertyPath: m_FontData.m_FontStyle
-      value: 0
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 869654941285720226, guid: 1b7fa27ff5e7fb844bdcae8e8269957e,
         type: 3}
