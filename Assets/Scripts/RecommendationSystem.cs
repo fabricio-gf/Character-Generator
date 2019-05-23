@@ -17,6 +17,8 @@ public class RecommendationSystem : MonoBehaviour
     StringBuilder sb = new StringBuilder();
     GeneticAlgorithm<int> localGA = null;
 
+    [SerializeField] private Sprite[] iconList = null;
+
     [Header("References")]
     [Header("Generation Screen")]
     [SerializeField] private Text[] texts = null;
@@ -24,10 +26,12 @@ public class RecommendationSystem : MonoBehaviour
     [SerializeField] private Text fitnessText = null;
     [SerializeField] private Text genesText = null;
     [SerializeField] private Text titleText = null;
+    [SerializeField] private Image icon = null;
 
     [Header("Results Screen")]
     [SerializeField] private Text[] resultsTexts = null;
     [SerializeField] private Text resultsTitleText = null;
+    [SerializeField] private Image resultsIcon = null;
 
 
     /*[SerializeField] private GameObject GoodButton = null;
@@ -87,9 +91,11 @@ public class RecommendationSystem : MonoBehaviour
     private void ShowOption(int index)
     {
         sb.Clear();
-        sb.Append("Personagens gerados: ");
+        sb.Append("Personagem: ");
         sb.Append(optionIndex+1);
         resultsTitleText.text = sb.Append("/10").ToString();
+
+        resultsIcon.sprite = iconList[topOptions[index].Genes[0]];
 
         for(int i = 0; i < resultsTexts.Length; i++)
         {
@@ -116,6 +122,11 @@ public class RecommendationSystem : MonoBehaviour
         Debug.Log("Export to pdf");
     }
 
+    public void GoToQuestionnaire()
+    {
+        Application.OpenURL("forms.gle/ohMJ8MYWKa3KWayJ7");
+    }
+
     public void ReturnToMenu()
     {
         topOptions.Clear();
@@ -130,6 +141,8 @@ public class RecommendationSystem : MonoBehaviour
         sb.Clear();
         sb.Append(currentIndex+1+(iterationNumber*3));
         titleText.text = sb.Append("º personagem gerado:").ToString();
+
+        UpdateIcon(individual[0]);
 
         sb.Clear();
         sb.Append("Genes: ");
@@ -151,5 +164,10 @@ public class RecommendationSystem : MonoBehaviour
         fitnessText.text = sb.Append(fitness).ToString();
 
 
+    }
+
+    private void UpdateIcon(int index)
+    {
+        icon.sprite = iconList[index];
     }
 }
