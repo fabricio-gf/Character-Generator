@@ -193,7 +193,9 @@ public class CharacterGenerator : MonoBehaviour
             FileReadWrite.WriteToBinaryFile(sb.ToString(), v.Value);
         }
 
+#if !UNITY_ANDROID
         TablesToFile();
+#endif
     }
 
     public void LoadTables(string profileName)
@@ -221,7 +223,9 @@ public class CharacterGenerator : MonoBehaviour
             tables[keyList[i]] = valueList[i];
         }
 
+#if !UNITY_ANDROID
         TablesToFile();
+#endif
     }
 
     private void TablesToFile()
