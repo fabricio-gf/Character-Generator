@@ -124,7 +124,8 @@ public class RecommendationSystem : MonoBehaviour
 
     public void GoToQuestionnaire()
     {
-        Application.OpenURL("forms.gle/ohMJ8MYWKa3KWayJ7");
+        Debug.Log("https://forms.gle/ohMJ8MYWKa3KWayJ7");
+        Application.OpenURL("https://docs.google.com/forms/d/e/1FAIpQLScshIlTAedg8HS6dm4Cr8LvuX5PYJhNAictWinqkShs3j6hpA/viewform?usp=sf_link");
     }
 
     public void ReturnToMenu()

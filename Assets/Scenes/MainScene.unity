@@ -2622,8 +2622,8 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: "Voc\xEA considera que o personagem gerado foi bom ou ruim, em compara\xE7\xE3o
-    com o perfil preenchido?"
+  m_Text: "Voc\xEA considera que o personagem gerado foi condizente ou n\xE3o, em
+    compara\xE7\xE3o com o perfil preenchido?"
 --- !u!222 &524090839
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2647,7 +2647,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &539730023
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2817,7 +2817,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: BOM
+  m_Text: Condizente
 --- !u!222 &567045880
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -3941,7 +3941,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: RUIM
+  m_Text: "N\xE3o condizente"
 --- !u!222 &776251817
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -4099,7 +4099,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &895155268
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7816,8 +7816,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -200, y: 75}
-  m_SizeDelta: {x: 250, y: 80}
+  m_AnchoredPosition: {x: -180, y: 75}
+  m_SizeDelta: {x: 320, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1623675433
 MonoBehaviour:
@@ -9604,8 +9604,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 200, y: 75}
-  m_SizeDelta: {x: 250, y: 80}
+  m_AnchoredPosition: {x: 180, y: 75}
+  m_SizeDelta: {x: 320, y: 80}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2028495343
 MonoBehaviour:
