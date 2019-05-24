@@ -38,6 +38,8 @@ public class CharacterGenerator : MonoBehaviour
     // USED TO WRITE THE GENERATION VALUES IN A FILE (on windows, located at "C:\Users\<user>\AppData\LocalLow\FabricioGuedes\Generations_Visualization")
     string testFileName = "Generations_Visualization";
     List<string> testLines = new List<string>();
+    string testTablesFileName = "Tables_Visualization";
+    private string profile = null;
 
     void Awake()
     {
@@ -155,9 +157,8 @@ public class CharacterGenerator : MonoBehaviour
     }
 
     // Updates weighted tables based on user evaluation of top individual
-    public void UpdateTables(int valueChange)
+    public void UpdateTables(int valueChange, int[] currentGenes)
     {
-        int[] bestGenes = ga.BestGenes;
         string tableName;
 
         for (int i = 0; i < profileAxes.Length; i++)
@@ -169,13 +170,114 @@ public class CharacterGenerator : MonoBehaviour
                 sb.Append("_");
                 tableName = sb.Append(features[j]).ToString();
 
-                tables[tableName][bestGenes[j], profileValues[i]] += valueChange;
+                tables[tableName][currentGenes[j], profileValues[i]] += valueChange;
             }
         }
+
+        SaveTables(profile, false);
     }
 
-      
-    
+    // METHODS USED TO SAVE/LOAD TABLES INFO
+
+    public void SaveTables(string profileName, bool newTables)
+    {
+        profile = profileName;
+        string filePath = Path.Combine(Application.persistentDataPath, "Tables", profileName, profileName);
+        
+        foreach(var v in tables)
+        {
+            sb.Clear();
+            sb.Append(filePath);
+            sb.Append("_" + v.Key);
+
+            FileReadWrite.WriteToBinaryFile(sb.ToString(), v.Value);
+        }
+
+        TablesToFile();
+    }
+
+    public void LoadTables(string profileName)
+    {
+        profile = profileName;
+        string filePath = Path.Combine(Application.persistentDataPath, "Tables", profileName, profileName);
+
+        List<string> keyList = new List<string>();
+        List<int[,]> valueList = new List<int[,]>();
+
+        foreach (var v in tables)
+        {
+            keyList.Add(v.Key);
+
+            sb.Clear();
+            sb.Append(filePath);
+            sb.Append("_" + v.Key);
+            //Debug.Log("Load path: " + sb.ToString());
+
+            valueList.Add(FileReadWrite.ReadFromBinaryFile<int[,]>(sb.ToString()));
+        }
+        
+        for(int i = 0; i < keyList.Count; i++)
+        {
+            tables[keyList[i]] = valueList[i];
+        }
+
+        TablesToFile();
+    }
+
+    private void TablesToFile()
+    {
+        List<string> linesList = new List<string>();
+        string currentLine = null;
+        string name = null;
+        int[,] tempTable = null;
+        string fileName = null;
+
+        for (int i = 0; i < profileAxes.Length; i++)
+        {
+            for(int j = 0; j < features.Length; j++)
+            {
+                name = profileAxes[i] + "_" + features[j];
+                tempTable = tables[name];
+
+                currentLine = "Table: " + name;
+                linesList.Add(currentLine);
+                currentLine = "";
+                linesList.Add(currentLine);
+                for (int k = 0; k < tempTable.GetLength(0); k++)
+                {
+                    currentLine = featureValues[j][k] + " | ";
+                    for(int l = 0; l < tempTable.GetLength(1); l++)
+                    {
+                        currentLine += tempTable[k, l];
+                        if (l < tempTable.GetLength(1) - 1)
+                        {
+                            currentLine += " | ";
+                        }
+                    }
+                    linesList.Add(currentLine);
+                }
+                currentLine = "";
+                linesList.Add(currentLine);
+                currentLine = "------------------------------";
+                linesList.Add(currentLine);
+                currentLine = "";
+                linesList.Add(currentLine);
+            }
+        }
+
+        fileName = Path.Combine(Application.persistentDataPath, testTablesFileName + ".txt");
+
+        if (File.Exists(fileName))
+        {
+            File.Delete(fileName);
+        }
+
+        File.Create(fileName).Dispose();
+        File.WriteAllLines(fileName, linesList.ToArray());
+
+
+    }
+
     // METHODS USED TO WRITE GENERATIONS INFO TO FILE
 
     private string[] ConvertGenerationToArray()

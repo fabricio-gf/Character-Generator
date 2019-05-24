@@ -118,10 +118,20 @@ public class ProfileGenerator : MonoBehaviour
         {
             NameErrorMessage.SetActive(false);
             profileName = ProfileNameField.text;
+
+            string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Tables", profileName);
+            System.IO.DirectoryInfo dirInfo = new System.IO.DirectoryInfo(filePath);
+            if (!dirInfo.Exists)
+            {
+                dirInfo.Create();
+            }
+
+            characterGenerator.SaveTables(profileName, true);
+
             windowBehaviours.ChangeActiveWindow(1);
         }
     }
-
+    
     public void SaveNewProfile(CharacterProfile profile)
     {
         string filePath = System.IO.Path.Combine(Application.persistentDataPath, "Profiles", profileName);
@@ -148,6 +158,8 @@ public class ProfileGenerator : MonoBehaviour
 
             filePath = System.IO.Path.Combine(Application.persistentDataPath, "Generations", profileName);
             filePath = filePath + "_Generation";
+
+            characterGenerator.LoadTables(profileName);
 
             characterGenerator.LoadGeneration(filePath);
 

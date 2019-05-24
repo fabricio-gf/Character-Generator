@@ -30,6 +30,13 @@ public class WindowBehaviours : MonoBehaviour
             dirInfo.Create();
         }
 
+        filePath = Path.Combine(Application.persistentDataPath, "Tables");
+        dirInfo = new DirectoryInfo(filePath);
+        if (!dirInfo.Exists)
+        {
+            dirInfo.Create();
+        }
+
         SetActiveWindow(Windows[4]);
     }
 

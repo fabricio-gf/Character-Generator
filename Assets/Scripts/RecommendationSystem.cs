@@ -171,4 +171,14 @@ public class RecommendationSystem : MonoBehaviour
     {
         icon.sprite = iconList[index];
     }
+
+    // Updates Tables on CharacterGenerator
+
+    public void UpdateTables(int valueChanged)
+    {
+        if(currentIndex + iterationNumber * 3 < topOptions.Count)
+            generator.UpdateTables(valueChanged, topOptions[currentIndex + iterationNumber * 3].Genes);
+
+        ShowNextResult();
+    }
 }
